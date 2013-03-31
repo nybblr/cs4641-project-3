@@ -26,7 +26,7 @@ public class DataSetWorker {
 	private DataSet clean;
 
 	private String setName;
-	private final int toKeep = 5;
+	private final int toKeep = 4;
 	
 	
 	public DataSetWorker(String setName, String file) throws Exception {
@@ -37,10 +37,10 @@ public class DataSetWorker {
 	public void reduce() {
     	// Add all the filters we need
 		ArrayList<Tuple<ReversibleFilter,String>> filters = new ArrayList<Tuple<ReversibleFilter,String>>();
-        filters.add(new Tuple<ReversibleFilter, String>(new PrincipalComponentAnalysis(clean), "_pca.csv"));
-        filters.add(new Tuple<ReversibleFilter, String>(new IndependentComponentAnalysis(clean), "_ica.csv"));
+        filters.add(new Tuple<ReversibleFilter, String>(new PrincipalComponentAnalysis(clean, toKeep), "_pca.csv"));
+        filters.add(new Tuple<ReversibleFilter, String>(new IndependentComponentAnalysis(clean, toKeep), "_ica.csv"));
         filters.add(new Tuple<ReversibleFilter, String>(new RandomizedProjectionFilter(toKeep, clean.get(0).size()), "_rp.csv"));
-        filters.add(new Tuple<ReversibleFilter, String>(new InsignificantComponentAnalysis(clean), "_insig.csv"));
+        filters.add(new Tuple<ReversibleFilter, String>(new InsignificantComponentAnalysis(clean, toKeep), "_insig.csv"));
 		for (Tuple<ReversibleFilter, String> tup : filters) {
 			ReversibleFilter filter = tup.fst();
 			String ext = tup.snd();
